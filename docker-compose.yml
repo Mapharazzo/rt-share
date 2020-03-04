@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  multiplexer:
+    build: ./multiplexer
+    volumes:
+      - ./multiplexer:/multiplexer
+    ports:
+      - '5000:5000'
+    expose:
+      - '5000'
+    stdin_open: true
+    tty: true
+    depends_on: 
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '32000:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/:ro
