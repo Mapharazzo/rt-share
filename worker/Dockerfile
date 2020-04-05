@@ -2,9 +2,9 @@ FROM python:3.6
 
 EXPOSE 5000
 
-WORKDIR /multiplexer
+WORKDIR /worker
 
-COPY requirements.txt /multiplexer
+COPY requirements.txt /worker
 RUN pip install -r requirements.txt
 
 
