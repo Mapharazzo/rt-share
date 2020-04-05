@@ -2,11 +2,9 @@ FROM python:3.6
 
 EXPOSE 5000
 
-WORKDIR /db_admin
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt
 
-COPY requirements.txt /db_admin
-RUN pip install -r requirements.txt
+COPY . /usr/src/app/
 
-
-COPY . .
-CMD python db_interface.py
+CMD ["python", "/usr/src/app/app.py"]
