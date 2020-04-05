@@ -1,4 +1,20 @@
-version: "2"
+version: "3.1"
+
+networks:
+  back-tier:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.100.0/24
+        # gateway: 172.16.100.1
+  front-tier:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.100.0/24
+        # gateway: 192.168.100.1
 
 services:
   multiplexer:
@@ -6,21 +22,72 @@ services:
     volumes:
       - ./multiplexer:/multiplexer
     ports:
-      - '5000:5000'
+      - "5000:5000"
     expose:
-      - '5000'
+      - "5000"
     stdin_open: true
     tty: true
     depends_on: 
       - db
+      - db_admin
+    networks:
+      back-tier:
+        ipv4_address: 172.16.100.2
+      front-tier:
+        ipv4_address: 192.168.100.2
+    environment:
+      DATABASE_HOST: db
+      ADMIN_HOST: db_admin
+
+  worker:
+    build: ./worker
+    volumes:
+        - ./worker:/worker
+    ports: 
+      - "5001:5000"
+    expose:
+      - "5000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - multiplexer
+    networks:
+      back-tier:
+        ipv4_address: 172.16.100.3
+      front-tier:
+        ipv4_address: 192.168.100.3
+    environment:
+      DATABASE_HOST: db
+      MULTIPLEXER_HOST: multiplexer
+      ADMIN_HOST: db_admin
 
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: "root"
     ports:
-      - '32000:3306'
+      - "32000:3306"
     expose:
-      - '3306'
+      - "3306"
     volumes:
       - ./db:/docker-entrypoint-initdb.d/:ro
+    networks:
+      back-tier:
+        ipv4_address: 172.16.100.4
+  
+  db_admin:
+    build: ./db_admin
+    networks:
+      back-tier:
+        ipv4_address: 172.16.100.5
+    ports:
+      - "5002:5000"
+    depends_on:
+      - db
+    volumes:
+      - ./db_admin:/db_admin
+    stdin_open: true
+    tty: true
+    environment:
+      DATABASE_HOST: db
+      MULTIPLEXER_HOST: multiplexer

@@ -1,16 +1,30 @@
 from typing import List, Dict
-from flask import Flask, render_template, flash, request, redirect, url_for
+from flask import Flask, render_template, flash, request, redirect, url_for, make_response
 import mysql.connector
 import json
 import os
 from werkzeug.utils import secure_filename
 from flask_session import Session
+import requests
+import random
+import os
 
 multiplexer = Flask(__name__)
 sess = Session()
 sess.init_app(multiplexer)
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', '.md', '.yml'}
 multiplexer.config['UPLOAD_FOLDER'] = 'test'
+DB_ADMIN_HOST = os.getenv('ADMIN_HOST')
+DB_ADMIN_HOST = '172.16.100.5'
+WORKER_HOST = '172.16.100.3'
+
+def choose_best_server():
+    # get it from db_interface
+    post_r = requests.get(f'http://{DB_ADMIN_HOST}:5000/get_servers')
+    all_servers = list(post_r.json())
+    # todo: actually use the database
+    return WORKER_HOST
+    return random.choice(all_servers)
 
 @multiplexer.route('/', methods=['GET', 'POST'])  
 def default():
@@ -36,10 +50,24 @@ def add_file():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(multiplexer.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('add_file',
-                                    filename=filename))
+            # create the new session
+            params = {'server_id': choose_best_server()}
+            post_r = requests.post(f'http://{DB_ADMIN_HOST}:5000/create_sess', json=params)
+            sess_id = post_r.json()
+
+            # todo: assign a worker to this file 
+            # currently just use the only server
+            # add the file to the worker
+            params = {'sess_id': sess_id}
+            files={'file': (sess_id, file)}
+            print(params)
+            requests.post(f'http://{WORKER_HOST}:5000/upload_new', files=files)
+
+            # set sess_id cookie and redirect
+            response = make_response(redirect(f'http://localhost:5001/'))
+            response.set_cookie('sess_id', sess_id)
+            return response
+            
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -53,6 +81,5 @@ def add_file():
 if __name__ == '__main__':
     multiplexer.secret_key = 'super secret key'
     multiplexer.config['SESSION_TYPE'] = 'filesystem'
-
     sess.init_app(multiplexer)
     multiplexer.run(host='0.0.0.0', port=5000, debug=True)

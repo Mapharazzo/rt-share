@@ -27,3 +27,5 @@ create table clients
   , primary key (id, session_id)
   , foreign key (session_id) references sessions (id) on delete cascade on update cascade
 );
+
+insert into servers (id, ip_addr, port) values ('test', '172.16.100.3', 5000);

@@ -1,0 +1,24 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div class="row">
+  <div class="column" style="background-color:#aaa;">
+    <textarea id="shared-text" rows="10" cols="80">
+        this will be updated
+    </textarea>        
+  </div>
+  <h1 id="sess_id">{{sess_id}}</h1>
+    <h2>Receive:</h2>
+    <div><p id="log"></p></div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="{{url_for('static', filename='keyboard.js')}}"></script>
+
+
+</body>
+</html>
