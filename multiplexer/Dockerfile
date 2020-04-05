@@ -8,5 +8,5 @@ COPY requirements.txt /multiplexer
 RUN pip install -r requirements.txt
 
 
-COPY multiplexer.py /multiplexer
+COPY . .
 CMD python multiplexer.py

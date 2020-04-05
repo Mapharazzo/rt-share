@@ -8,5 +8,5 @@ COPY requirements.txt /db_admin
 RUN pip install -r requirements.txt
 
 
-COPY db_interface.py /db_admin
+COPY . .
 CMD python db_interface.py
