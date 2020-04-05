@@ -60,7 +60,7 @@ services:
       ADMIN_HOST: db_admin
 
   db:
-    image: mysql:5.7
+    build: ./db
     environment:
       MYSQL_ROOT_PASSWORD: "root"
     ports:
