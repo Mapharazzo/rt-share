@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 SCHED_TIME = 1
 rooms = set()
-app.config['UPLOAD_FOLDER'] = 'files'
+app.config['UPLOAD_FOLDER'] = '/usr/src/app/files'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -33,6 +33,7 @@ def upload():
     print(file)
 
     # file.save(filename)
+    print(os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     # server = SocketServer(filename)
