@@ -2,11 +2,9 @@ FROM python:3.6
 
 EXPOSE 5000
 
-WORKDIR /worker
+COPY requirements.txt /usr/src/app/
+RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt
 
-COPY requirements.txt /worker
-RUN pip install -r requirements.txt
+COPY . /usr/src/app/
 
-
-COPY . .
-CMD python app.py
+CMD ["python" "/usr/src/app/app.py"]

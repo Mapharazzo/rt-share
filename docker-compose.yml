@@ -41,8 +41,6 @@ services:
 
   worker:
     build: ./worker
-    volumes:
-        - ./worker:/worker
     ports: 
       - "5001:5000"
     expose:
