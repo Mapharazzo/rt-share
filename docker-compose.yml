@@ -68,7 +68,7 @@ services:
     expose:
       - "3306"
     volumes:
-      - ./db:/docker-entrypoint-initdb.d/:ro
+      - db_volume:/var/lib/mysql
     networks:
       back-tier:
         ipv4_address: 172.16.100.4
@@ -89,3 +89,5 @@ services:
     environment:
       DATABASE_HOST: db
       MULTIPLEXER_HOST: multiplexer
+volumes:
+  db_volume:

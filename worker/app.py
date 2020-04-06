@@ -11,6 +11,9 @@ app.config['SECRET_KEY'] = 'secret!'
 SCHED_TIME = 1
 rooms = set()
 app.config['UPLOAD_FOLDER'] = '/usr/src/app/files'
+import os
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
