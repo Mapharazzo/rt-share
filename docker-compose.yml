@@ -2,22 +2,23 @@ version: "3.1"
 
 networks:
   back-tier:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.16.100.0/24
-        # gateway: 172.16.100.1
+    # driver: bridge
+    # ipam:
+    #   driver: default
+    #   config:
+    #   - subnet: 172.16.100.0/24
+    #     # gateway: 172.16.100.1
   front-tier:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 192.168.100.0/24
-        # gateway: 192.168.100.1
+    # driver: bridge
+    # ipam:
+    #   driver: default
+    #   config:
+    #   - subnet: 192.168.100.0/24
+    #     # gateway: 192.168.100.1
 
 services:
   multiplexer:
+    # image: mapharazzo/rt-share-multiplexer:latest
     build: ./multiplexer
     volumes:
       - ./multiplexer:/multiplexer
@@ -31,15 +32,16 @@ services:
       - db
       - db_admin
     networks:
-      back-tier:
-        ipv4_address: 172.16.100.2
-      front-tier:
-        ipv4_address: 192.168.100.2
+      - back-tier
+        # ipv4_address: 172.16.100.2
+      - front-tier
+        # ipv4_address: 192.168.100.2
     environment:
       DATABASE_HOST: db
       ADMIN_HOST: db_admin
 
   worker:
+    # image: mapharazzo/rt-share-worker:latest
     build: ./worker
     ports: 
       - "5001:5000"
@@ -50,16 +52,17 @@ services:
     depends_on:
       - multiplexer
     networks:
-      back-tier:
-        ipv4_address: 172.16.100.3
-      front-tier:
-        ipv4_address: 192.168.100.3
+      - back-tier
+        # ipv4_address: 172.16.100.3
+      - front-tier
+        # ipv4_address: 192.168.100.3
     environment:
       DATABASE_HOST: db
       MULTIPLEXER_HOST: multiplexer
       ADMIN_HOST: db_admin
 
   db:
+    # image: mapharazzo/rt-share-db:latest
     build: ./db
     environment:
       MYSQL_ROOT_PASSWORD: "root"
@@ -70,14 +73,15 @@ services:
     volumes:
       - db_volume:/var/lib/mysql
     networks:
-      back-tier:
-        ipv4_address: 172.16.100.4
+      - back-tier
+        # ipv4_address: 172.16.100.4
   
   db_admin:
+    # image: mapharazzo/rt-share-db-admin:latest
     build: ./db_admin
     networks:
-      back-tier:
-        ipv4_address: 172.16.100.5
+      - back-tier
+        # ipv4_address: 172.16.100.5
     ports:
       - "5002:5000"
     depends_on:

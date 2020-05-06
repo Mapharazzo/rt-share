@@ -17,7 +17,7 @@ app.config['UPLOAD_FOLDER'] = '/usr/src/app/files'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-DB_ADMIN_HOST = '172.16.100.5'
+DB_ADMIN_HOST = 'db_admin'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

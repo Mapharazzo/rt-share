@@ -15,8 +15,8 @@ sess.init_app(multiplexer)
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', '.md', '.yml'}
 multiplexer.config['UPLOAD_FOLDER'] = 'test'
 DB_ADMIN_HOST = os.getenv('ADMIN_HOST')
-DB_ADMIN_HOST = '172.16.100.5'
-WORKER_HOST = '172.16.100.3'
+DB_ADMIN_HOST = 'db_admin'
+WORKER_HOST = 'worker'
 
 def choose_best_server():
     # get it from db_interface
