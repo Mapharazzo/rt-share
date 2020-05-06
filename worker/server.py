@@ -7,6 +7,8 @@ def parse_command(command):
     # returns the function to call and the arguments
     if command['type'] == 'insertText':
         return FileSharing.put, (command['pos'] - 1, command['keyCode'])
+    elif command['type'] == 'insertLineBreak':
+        return FileSharing.put, (command['pos'] - 1, '\n')
     elif command['type'] == 'deleteContentBackward':
         return FileSharing.delete, (command['pos'], 1)
     elif command['type'] == 'deleteContentForward':

@@ -40,7 +40,7 @@ $(document).ready(function(){
         $('#shared-text').val(msg.all_text);
         console.log(msg);
     });
-    $('#shared-text').on('input', function (e) {
+    $('#shared-text').on('keydown', function (e) {
         console.log(e);
         console.log(e.originalEvent.data);
         console.log(e.keyCode);

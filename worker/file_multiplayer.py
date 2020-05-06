@@ -42,17 +42,23 @@ class FileSharing():
         if string is None:
             pass
         print(string)
-        strlen = len(string)
-        self.mm.move(offset + strlen, offset, self.len - offset)
-        self.mm.seek(offset)
-        self.mm.write(bytes(string, encoding='utf8'))
-        self.mm.flush()
-        self.len += strlen
-        
+        try:
+            strlen = len(string)
+            self.mm.move(offset + strlen, offset, self.len - offset)
+            self.mm.seek(offset)
+            self.mm.write(bytes(string, encoding='utf8'))
+            self.mm.flush()
+            self.len += strlen
+        except:
+            pass
+            
     def delete(self, offset, length):
-        self.mm.move(offset, offset + length, self.len - offset - length)
-        self.mm.flush()
-        self.len -= length
+        try:
+            self.mm.move(offset, offset + length, self.len - offset - length)
+            self.mm.flush()
+            self.len -= length
+        except:
+            pass
 
     def get(self):
         return ''.join(chr(i) for i in (self.mm[:self.len]))

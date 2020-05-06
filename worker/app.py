@@ -30,6 +30,16 @@ def index():
         return Response(status=404)
 
     return render_template('index.html', sess_id=sess_id)
+
+@app.route('/join', methods=['GET', 'POST'])
+def join():
+    global sio
+    # get the sess_id cookie if set
+    sess_id = request.args.get('sess_id')
+    if sess_id is None:
+        return Response(status=404)
+
+    return render_template('index.html', sess_id=sess_id)
     
 @app.route('/upload_new', methods=['POST'])
 def upload():
