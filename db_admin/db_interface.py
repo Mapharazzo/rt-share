@@ -50,8 +50,13 @@ class DBWrapper():
 
         # now insert the new session into the database
         query = f"INSERT INTO sessions (id, server_id) VALUES ('{code}', '{server_id}')"
+        self.cursor.execute(query)
 
         return code
+
+    def remove_session(self, code):
+        query = f"DELETE FROM sessions WHERE id='{code}'"
+        self.cursor.execute(query)
 
 @db_admin.route('/create_sess', methods=['POST'])
 def create_sess():
@@ -61,6 +66,15 @@ def create_sess():
     sess_id = db.create_session(server_id)
 
     return jsonify(sess_id), 200
+
+@db_admin.route('/remove_sess', methods=['POST'])
+def remove_sess():
+    global db
+    params = request.get_json()
+    code = params['code']
+    sess_id = db.remove_session(code)
+
+    return Response(status=200)
 
 @db_admin.route('/get_servers', methods=['GET'])
 def get_servers():

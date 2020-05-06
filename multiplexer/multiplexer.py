@@ -23,7 +23,7 @@ def choose_best_server():
     post_r = requests.get(f'http://{DB_ADMIN_HOST}:5000/get_servers')
     all_servers = list(post_r.json())
     # todo: actually use the database
-    return WORKER_HOST
+    return 'test'
     return random.choice(all_servers)
 
 @multiplexer.route('/', methods=['GET', 'POST'])  

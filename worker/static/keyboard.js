@@ -21,8 +21,10 @@ var $ = jQuery;
 $(document).ready(function(){
     var namespace = $('#sess_id').text();;
     console.log(namespace);
-    console.log('http://' + 'localhost' + ':' + '5001' + '/')
-    var socket = io.connect('http://' + 'localhost' + ':' + '5001' + '/');
+    var urlElements = window.location.href.split('/')
+    var url = urlElements.slice(0, urlElements.length - 1).join('/')
+    console.log(url + '/' + namespace)
+    var socket = io.connect(url + '/' + namespace);
 
     socket.on('on_connect', function() {
         $('#log').append('<br>Connected');

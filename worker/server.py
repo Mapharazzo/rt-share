@@ -16,10 +16,11 @@ def parse_command(command):
 
 class SocketServer(socketio.Namespace):
     def __init__(self, filename):
-        self.namespace = filename.split('/')[-1]
-        # todo: use the namespace properly
-        # super(SocketServer, self).__init__(self.namespace)
-        super(SocketServer, self).__init__()
+        self.filename = filename
+        self.code = filename.split('/')[-1]
+        self.namespace = '/' + filename.split('/')[-1]
+        print(self.namespace)
+        super(SocketServer, self).__init__(self.namespace)
         self.fs = FileSharing(filename)
         self.command_buffers = {}
         self.command_buffers_sentinel = {}
@@ -34,16 +35,17 @@ class SocketServer(socketio.Namespace):
 
     def on_disconnect(self, sid):
         print('disconnect ', sid)
-        del self.command_buffers[sid]
-        del self.command_buffers_sentinel[sid]
-        self.clients.remove(sid)
-        self.emit('my_response', {'data': 'Disconnected', 'count': 0}, room=sid)
+        try:
+            del self.command_buffers[sid]
+            del self.command_buffers_sentinel[sid]
+            self.clients.remove(sid)
+            self.emit('my_response', {'data': 'Disconnected', 'count': 0}, room=sid)
+        except:
+            pass
     
     def on_input(self, sid, message):
         # handle the message
         self.command_buffers[sid].append(parse_command(message))
-        print('recv')
-        print(message)
         return "OK", 123
 
     def file_jobs(self):
