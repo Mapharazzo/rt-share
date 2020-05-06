@@ -60,11 +60,12 @@ def add_file():
             # add the file to the worker
             params = {'sess_id': sess_id}
             files={'file': (sess_id, file)}
-            print(params)
+
             requests.post(f'http://{WORKER_HOST}:5000/upload_new', files=files)
 
             # set sess_id cookie and redirect
-            response = make_response(redirect(f'http://localhost:5001/'))
+            actual_url = ':'.join(request.url.split(':')[:2])
+            response = make_response(redirect(f'{actual_url}:5001/'))
             response.set_cookie('sess_id', sess_id)
             return response
             
