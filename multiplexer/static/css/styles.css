@@ -68,6 +68,14 @@ hr.light {
   border-color: white;
 }
 
+.h-100 {
+	overflow: hidden;
+}
+
+.display-1 {
+	text-align: center;
+}
+
 h1 {
     font-family: 'Catamaran', 'Helvetica', 'Arial', 'sans-serif';
     font-weight: 200;

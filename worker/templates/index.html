@@ -31,17 +31,13 @@
               </div>
               <textarea id="shared-text" class="lined" rows="10" cols="80">
                   this will be updated
-              </textarea>        
-              <h1 id="sess_id">{{sess_id}}</h1>
-              <h2>Receive:</h2>
-              <div><p id="log"></p></div>
-              <!-- Target -->
-              <input id="hidden_url" value='{{join_link}}'>
-
-              <!-- Trigger -->
-              <button class="btn" data-clipboard-target="#hidden_url">
-                  <img src="assets/clippy.svg" alt="Copy to clipboard">
-              </button>
+              </textarea>
+              <div class="code-wrapper" style="display: flex; align-items: center; justify-content: center;">
+                <h1 id="sess_id" style="margin-right: 10px;">{{sess_id}}</h1>
+                <button class="btn" onclick="copyToClipboard()" style="">
+                  <img src="{{url_for('static', filename='icons/clippy.svg')}}" alt="Copy to clipboard">
+                </button>
+              </div> 
           </div>
       </div>
   </header>
@@ -50,14 +46,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-<script src="{{url_for('static', filename='keyboard.js')}}"></script>
-<script src="{{url_for('static', filename='linenumbers.js')}}"></script>
-<!-- <script>
-  $(function() {
-    $(".lined").linedtextarea(
-      {selectedLine: 1}
-    );
-  });
-</script> -->
+<script src="{{url_for('static', filename='js/keyboard.js')}}"></script>
+<script src="{{url_for('static', filename='js/linenumbers.js')}}"></script>
+<script>
+  function copyToClipboard() {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val("{{join_link}}").select();
+    document.execCommand("copy");
+    $temp.remove();
+  }
+</script>
 
 </html>

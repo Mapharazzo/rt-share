@@ -64,6 +64,16 @@ hr {
   border-color: rgba(34, 34, 34, 0.1);
 }
 
+.h-100 {
+	overflow: hidden;
+	text-align: center;
+}
+
+.display-1 {
+	text-align: center;
+}
+
+
 hr.light {
   border-color: white;
 }
