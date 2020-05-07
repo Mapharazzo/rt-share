@@ -2,23 +2,62 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body>
 
-<div class="row">
-  <div class="column" style="background-color:#aaa;">
-    <textarea id="shared-text" rows="10" cols="80">
-        this will be updated
-    </textarea>        
-  </div>
-  <h1 id="sess_id">{{sess_id}}</h1>
-    <h2>Receive:</h2>
-    <div><p id="log"></p></div>
-</div>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login Page</title>
+    <!--Made with love by Mutiullah Samim -->
+
+    <!--Bootsrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+    <!--Custom styles-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+  <header class="masthead">
+      <div class="container h-100">
+          <div class="col h-100">
+              <div class="row-lg-7 my-auto">
+                  <h1 class="display-1">RT-Share</h1>
+              </div>
+              <textarea id="shared-text" class="lined" rows="10" cols="80">
+                  this will be updated
+              </textarea>        
+              <h1 id="sess_id">{{sess_id}}</h1>
+              <h2>Receive:</h2>
+              <div><p id="log"></p></div>
+              <!-- Target -->
+              <input id="hidden_url" value='{{join_link}}'>
+
+              <!-- Trigger -->
+              <button class="btn" data-clipboard-target="#hidden_url">
+                  <img src="assets/clippy.svg" alt="Copy to clipboard">
+              </button>
+          </div>
+      </div>
+  </header>
+</body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 <script src="{{url_for('static', filename='keyboard.js')}}"></script>
+<script src="{{url_for('static', filename='linenumbers.js')}}"></script>
+<!-- <script>
+  $(function() {
+    $(".lined").linedtextarea(
+      {selectedLine: 1}
+    );
+  });
+</script> -->
 
-
-</body>
 </html>

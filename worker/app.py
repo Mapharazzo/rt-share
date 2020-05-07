@@ -29,7 +29,9 @@ def index():
     if sess_id is None:
         return Response(status=404)
 
-    return render_template('index.html', sess_id=sess_id)
+    actual_url = ':'.join(request.url.split(':')[:2])
+    join_link = f'{actual_url}:5000/join?sess_id={sess_id}'
+    return render_template('index.html', sess_id=sess_id, join_link=join_link)
 
 @app.route('/join', methods=['GET', 'POST'])
 def join():

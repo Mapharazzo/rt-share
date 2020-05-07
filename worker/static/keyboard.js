@@ -19,6 +19,8 @@ var $ = jQuery;
 })(jQuery);
 
 $(document).ready(function(){
+    new ClipboardJS('.btn');
+    // document.getElementById("hidden_url").style.display = "none";
     var namespace = $('#sess_id').text();;
     console.log(namespace);
     var urlElements = window.location.href.split('/')
@@ -40,11 +42,17 @@ $(document).ready(function(){
         $('#shared-text').val(msg.all_text);
         console.log(msg);
     });
-    $('#shared-text').on('keydown', function (e) {
+    $('#shared-text').on('input', function (e) {
         console.log(e);
         console.log(e.originalEvent.data);
         console.log(e.keyCode);
         console.log($(this).getCursorPosition())
-        socket.emit('input', {type: e.originalEvent.inputType, keyCode: e.originalEvent.data, pos: $(this).getCursorPosition()})
+        var type = e.originalEvent.inputType;
+        var keyCode = e.originalEvent.data;
+        if (!type) {
+            type = e.originalEvent.type;
+            keyCode = e.originalEvent.keyCode;
+        }
+        socket.emit('input', {type: type, keyCode: keyCode, pos: $(this).getCursorPosition()})
     });    
 });

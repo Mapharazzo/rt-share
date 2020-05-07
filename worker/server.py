@@ -7,12 +7,14 @@ def parse_command(command):
     # returns the function to call and the arguments
     if command['type'] == 'insertText':
         return FileSharing.put, (command['pos'] - 1, command['keyCode'])
-    elif command['type'] == 'insertLineBreak':
+    if command['type'] == 'insertLineBreak' or (command['type'] == 'keydown' and command['keyCode'] == 13):
         return FileSharing.put, (command['pos'] - 1, '\n')
-    elif command['type'] == 'deleteContentBackward':
+    elif command['type'] == 'deleteContentBackward' or (command['type'] == 'keydown' and command['keyCode'] == 9):
         return FileSharing.delete, (command['pos'], 1)
-    elif command['type'] == 'deleteContentForward':
+    elif command['type'] == 'deleteContentForward' or (command['type'] == 'keydown' and command['keyCode'] == 46):
         return FileSharing.delete, (command['pos'], 1)
+    elif command['type'] == 'keydown' and command['keyCode'] != 18:
+        return FileSharing.put, (command['pos'] - 1, chr(command['keyCode']))
     else:
         raise Exception
 
@@ -47,6 +49,7 @@ class SocketServer(socketio.Namespace):
     
     def on_input(self, sid, message):
         # handle the message
+        print(message)
         self.command_buffers[sid].append(parse_command(message))
         return "OK", 123
 
