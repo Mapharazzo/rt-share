@@ -51,12 +51,18 @@ class DBWrapper():
         # now insert the new session into the database
         query = f"INSERT INTO sessions (id, server_id) VALUES ('{code}', '{server_id}')"
         self.cursor.execute(query)
+        self.connection.commit()
+
+        query = f"SELECT count(*) from sessions"
+        self.cursor.execute(query)
+        print(self.cursor.fetchall())
 
         return code
 
     def remove_session(self, code):
         query = f"DELETE FROM sessions WHERE id='{code}'"
         self.cursor.execute(query)
+        self.connection.commit()
 
 @db_admin.route('/create_sess', methods=['POST'])
 def create_sess():
